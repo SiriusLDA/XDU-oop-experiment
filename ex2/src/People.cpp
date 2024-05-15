@@ -1,6 +1,6 @@
 #include "Menu.hpp"
 #include "People.hpp"
-#define Customer_Info_PATH "Customer_Info.txt"
+#define Customer_Info_PATH "D:/CodingProjects/oop-experiment/ex2/db/Customer_Info.txt"
 //Admin function
 Admin::Admin(string account, string password)
 {
@@ -40,7 +40,7 @@ Customer::Customer(string phone, string name, string account, string password)
     this->password=password;
 }
 
-void Customer::LoadCustomerData(vector<Customer>& Customers)
+void Customer::LoadCustomerData(vector<Customer>& Customers) //load customer info from file
 {
     Customers.clear(); //clear the vector first
     fstream file;

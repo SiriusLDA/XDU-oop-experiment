@@ -1,4 +1,6 @@
+#pragma once
 #include <bits/stdc++.h>
+#include"People.hpp"
 using namespace std;
 class Menu
 {
