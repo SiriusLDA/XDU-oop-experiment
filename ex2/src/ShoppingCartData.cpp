@@ -12,7 +12,7 @@ ShoppingCartData::ShoppingCartData(string category, string name, double single_p
     this->IsInSettlementList=IsInSettlementList;
 }
 
-void ShoppingCartData::CheckShoppingCartExist(vector<Customer>& Customers,int Customer_Index)
+void ShoppingCartData::CheckShoppingCartExist(vector<Customer>& Customers,int Customer_Index) //check and create file
 {
     stringstream ss;
     ss<<"D:/CodingProjects/oop-experiment/ex2/db/Customer_ShoppingCart_Info/";
@@ -27,7 +27,7 @@ void ShoppingCartData::CheckShoppingCartExist(vector<Customer>& Customers,int Cu
     }
     else return;
 }
-
+//load data 
 void ShoppingCartData::LoadShoppingCartData(vector<ShoppingCartData>& ShoppingCart, vector<Customer>& Customers, int Customer_Index)
 {
     ShoppingCart.clear();
@@ -48,7 +48,7 @@ void ShoppingCartData::LoadShoppingCartData(vector<ShoppingCartData>& ShoppingCa
     }
     file.close();
 }
-
+//save data
 void ShoppingCartData::SaveShoppingCartData(vector<ShoppingCartData>& ShoppingCart, vector<Customer>& Customers,int Customer_Index)
 {
     stringstream ss;
@@ -155,16 +155,17 @@ void ShoppingCartData::DeleteGoodsInShoppingCart(vector<ShoppingCartData>& Shopp
     cout<<"Input the name of goods to be deleted\n";
     string Name;
     cin>>Name;
-    int Goods_index_sp=ShoppingCartData::ReturnIndexInShoppingCart(ShoppingCart, Name);
-    int Goods_index_st=Goods::ReturnGoodsIndex(Store, Name);
+    int Goods_index_sp=ShoppingCartData::ReturnIndexInShoppingCart(ShoppingCart, Name); //goods index in shopping cart
+    int Goods_index_st=Goods::ReturnGoodsIndex(Store, Name); // goods index in store
     if(Goods_index_sp==-1)
     {
         cout<<"The goods doesn't exist\n";
     }
     else
     {
-        Store[Goods_index_st].inventory+= ShoppingCart[Goods_index_sp].number;
-        ShoppingCart.erase(ShoppingCart.begin()+Goods_index_sp);
+        Store[Goods_index_st].inventory+= ShoppingCart[Goods_index_sp].number;//update inventory
+        ShoppingCart.erase(ShoppingCart.begin()+Goods_index_sp); //delete in shopping cart
+
         Goods::SaveStoreData(Store);
         ShoppingCartData::SaveShoppingCartData(ShoppingCart, Customers, Customer_Index);
         cout<<"Delete goods in shopping cart successful\n";
@@ -176,8 +177,8 @@ void ShoppingCartData::MofifyGoodsInShoppingCart(vector<ShoppingCartData>& Shopp
     cout<<"Input the name of goods to be modified\n";
     string Name;
     cin>>Name;
-    int Goods_index_sp=ShoppingCartData::ReturnIndexInShoppingCart(ShoppingCart, Name);
-    int Goods_index_st=Goods::ReturnGoodsIndex(Store, Name);
+    int Goods_index_sp=ShoppingCartData::ReturnIndexInShoppingCart(ShoppingCart, Name);//goods index in shopping cart
+    int Goods_index_st=Goods::ReturnGoodsIndex(Store, Name);// goods index in store
     if(Goods_index_sp==-1)
     {
         cout<<"The goods doesn't exist\n";
@@ -197,8 +198,11 @@ void ShoppingCartData::MofifyGoodsInShoppingCart(vector<ShoppingCartData>& Shopp
         }
         else if(Number<= Store[Goods_index_st].inventory+ ShoppingCart[Goods_index_sp].number)
         {
-            Store[Goods_index_st].inventory=Store[Goods_index_st].inventory+ ShoppingCart[Goods_index_sp].number- Number;
+            //update inventory
+            Store[Goods_index_st].inventory= Store[Goods_index_st].inventory + ShoppingCart[Goods_index_sp].number - Number;
+            //update number
             ShoppingCart[Goods_index_sp].number= Number;
+            //calculate subtotal_price
             ShoppingCart[Goods_index_sp].subtotal_price= Number * ShoppingCart[Goods_index_sp].single_price;
             Goods::SaveStoreData(Store);
             ShoppingCartData::SaveShoppingCartData(ShoppingCart, Customers, Customer_Index);
@@ -219,6 +223,7 @@ void ShoppingCartData::AddtoSettlementList(vector<ShoppingCartData>& ShoppingCar
     }
     else
     {
+        //modify in settlement list flag
         ShoppingCart[Goods_index_sp].IsInSettlementList="1";
         ShoppingCartData::SaveShoppingCartData(ShoppingCart, Customers, Customer_Index);
         cout<<"Add to settlement list successful\n";
@@ -237,19 +242,20 @@ void ShoppingCartData::RemoveFromSettlementList(vector<ShoppingCartData>& Shoppi
     }
     else
     {
+        //modify in settlement list flag
         ShoppingCart[Goods_index_sp].IsInSettlementList="0";
         ShoppingCartData::SaveShoppingCartData(ShoppingCart, Customers, Customer_Index);
         cout<<"Remove from settlement list successful\n";
     }
 }
-
+//Generate random code for discount
 string ShoppingCartData::GenerateDiscountCode(size_t length)
 {
     const char charset[] =
         "0123456789"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         "abcdefghijklmnopqrstuvwxyz";
-    const size_t max_index = sizeof(charset) - 2;  // Delete '\0' 
+    const size_t max_index = sizeof(charset) - 2;  // Delete '\0' at the end
 
     random_device rd;  // Get random seed
     mt19937 generator(rd());  // Create generator
@@ -265,7 +271,7 @@ string ShoppingCartData::GenerateDiscountCode(size_t length)
 
     return random_string;
 }
-
+//Generate random value for discount
 int ShoppingCartData::GenerateDiscountNum(int min, int max)
 {
     random_device rd;  // Get random seed
@@ -274,11 +280,12 @@ int ShoppingCartData::GenerateDiscountNum(int min, int max)
     int random_number = dis(gen);
     return random_number;
 }
-
+//if in festival period
 bool ShoppingCartData::IsInFestival(struct tm& date)
 {
     tm start={0,0,0,1,4,124}; //2024-5-1
     tm end={0,0,0,1,5,124}; //2024-6-1
+    //tm to time_t
     time_t dateT= mktime(const_cast<tm*>(&date));
     time_t startT= mktime(const_cast<tm*>(&start));
     time_t endT= mktime(const_cast<tm*>(&end));
@@ -287,24 +294,29 @@ bool ShoppingCartData::IsInFestival(struct tm& date)
 
 void ShoppingCartData::SettleGoods(vector<ShoppingCartData>& ShoppingCart, vector<HistoryData> History, vector<Customer>& Customers,int Customer_Index)
 {
+    //generate random code and value for discount
     string DiscountCode=ShoppingCartData::GenerateDiscountCode(8);
     int DiscountNumber=ShoppingCartData::GenerateDiscountNum(5,15);
     int FestivalDiscountNumber=ShoppingCartData::GenerateDiscountNum(5,10);
 
+    //get settle time
     auto now = chrono::system_clock::now(); //current time point
     time_t now_time = chrono::system_clock::to_time_t(now); //time point transform to time_t
     struct tm* date = localtime(&now_time);//time_t transform to tm struct
     string Year= to_string(date->tm_year+ 1900);
     string Month= to_string(date->tm_mon+ 1);
     string Date= to_string(date->tm_mday);
+
     bool InFestivalFlag=ShoppingCartData::IsInFestival(*date);
 
     int TotalDiscount=0;
+    //In festival
     if(InFestivalFlag==true)
     {
         cout<<"Good news! During the festival, you will get a "<<FestivalDiscountNumber<<"% off!\n";
         TotalDiscount+=FestivalDiscountNumber;
     }
+    //random discount
     cout<<"Good news! You have got a "<<DiscountNumber<<"% off from the system!\n";
     cout<<"Input "<<DiscountCode<<" to enjoy the discount\n";
     string cus_code;
@@ -331,12 +343,16 @@ void ShoppingCartData::SettleGoods(vector<ShoppingCartData>& ShoppingCart, vecto
         {
             if(ShoppingCart[i].IsInSettlementList=="1")
             {
+                //original price 
                 sum+=ShoppingCart[i].subtotal_price;
-                double Subtotal_price_after_discount= ShoppingCart[i].subtotal_price * (100-TotalDiscount) * 1.0 / 100.0;
-                sum_after_discount+=Subtotal_price_after_discount;
+                //price after discount
+                double Subtotal_price_after_discount = ShoppingCart[i].subtotal_price * (100-TotalDiscount) * 1.0 / 100.0;
+                sum_after_discount += Subtotal_price_after_discount;
+                //add to history
                 HistoryData his(Year, Month, Date, ShoppingCart[i].category, ShoppingCart[i].name, ShoppingCart[i].subtotal_price, Subtotal_price_after_discount);
                 History.push_back(his);
             }
+            //Remove settled goods in shopping cart
             ShoppingCart.erase(std::remove_if(ShoppingCart.begin(), ShoppingCart.end(), [](const ShoppingCartData& element) {
             return element.IsInSettlementList== "1";
             }), ShoppingCart.end());

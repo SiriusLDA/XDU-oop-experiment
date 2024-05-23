@@ -49,7 +49,7 @@ void Goods::DisplayStore(vector<Goods>& Store)
     cout<<"\n";
 }
 
-int Goods::ReturnGoodsIndex(vector<Goods> Store, string name) //return goods index by name
+int Goods::ReturnGoodsIndex(vector<Goods> Store, string name) //return goods index in store by name
 {
     int size=Store.size();
     for(int i=0; i<size; i++)
@@ -105,7 +105,7 @@ void Goods::ModifyGoods(vector<Goods>& Store)
         cout<<"Format: [price] [description] [inventory]\n";
         string Price, Description, Inventory;
         cin>>Price>>Description>>Inventory;
-        if(stod(Inventory)<0)
+        if(stod(Inventory)<0) //illegal input
         {
             cout<<"Inventory should be no less than 0\n";
         }
@@ -121,7 +121,7 @@ void Goods::ModifyGoods(vector<Goods>& Store)
     }
 }
 
-void Goods::SearchGoodsInStore(vector<Goods>& Store)
+void Goods::SearchGoodsInStore(vector<Goods>& Store) //keyword search
 {
     cout<<"Input keyword or name of the goods\n";
     string keyword;
@@ -131,7 +131,7 @@ void Goods::SearchGoodsInStore(vector<Goods>& Store)
     cout<<Store[ClosestMatchIndex].category<<" "<<Store[ClosestMatchIndex].name<<" "<<Store[ClosestMatchIndex].price<<" "<<Store[ClosestMatchIndex].description<<" "<<Store[ClosestMatchIndex].inventory<<"\n\n";
 }
 
-int Goods::LevenshteinDistance(string& s1, string& s2)
+int Goods::LevenshteinDistance(string& s1, string& s2) //calculate LD
 {
     int m=s1.length();
     int n=s2.length();
@@ -161,7 +161,7 @@ int Goods::LevenshteinDistance(string& s1, string& s2)
     return dp[m][n];
 }
 
-int Goods::ClosestMatch(vector<Goods>& Store, string& keyword)
+int Goods::ClosestMatch(vector<Goods>& Store, string& keyword) //find min LD Index
 {
     int ClosestMatchIndex=-1;
     int minDistance= numeric_limits<int>::max();

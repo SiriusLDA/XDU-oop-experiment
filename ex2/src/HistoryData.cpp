@@ -10,7 +10,7 @@ HistoryData::HistoryData(string year, string month, string date, string category
     this->subtotal_price=subtotal_price;
     this->subtotal_price_afte_discount=subtotal_price_afte_discount;
 }
-void HistoryData::CheckHistoryExist(vector<Customer>& Customers,int Customer_Index)
+void HistoryData::CheckHistoryExist(vector<Customer>& Customers,int Customer_Index) //Check and create file
 {
     stringstream ss;
     ss<<"D:/CodingProjects/oop-experiment/ex2/db/Customer_ShoppingHistory_Info/";
@@ -25,7 +25,7 @@ void HistoryData::CheckHistoryExist(vector<Customer>& Customers,int Customer_Ind
     }
     else return;
 }
-void HistoryData::LoadHistoryData(vector<HistoryData>& History, vector<Customer>& Customers,int Customer_Index)
+void HistoryData::LoadHistoryData(vector<HistoryData>& History, vector<Customer>& Customers,int Customer_Index)//load data
 {
     History.clear();
     stringstream ss;
@@ -45,7 +45,7 @@ void HistoryData::LoadHistoryData(vector<HistoryData>& History, vector<Customer>
     }
     file.close();
 }
-void HistoryData::SaveHistoryData(vector<HistoryData>& History, vector<Customer>& Customers,int Customer_Index)
+void HistoryData::SaveHistoryData(vector<HistoryData>& History, vector<Customer>& Customers,int Customer_Index)//save data
 {
     stringstream ss;
     ss<<"D:/CodingProjects/oop-experiment/ex2/db/Customer_ShoppingHistory_Info/";
