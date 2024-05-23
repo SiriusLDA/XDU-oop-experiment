@@ -65,6 +65,16 @@ void Goods::AddGoods(vector<Goods>& Store)
     cout<<"Input the information of goods to be added\n";
     cout<<"Format: [category] [name] [price] [description] [inventory]\n";
     cin>>Category>>Name>>Price>>Description>>Inventory;
+    //avoid existence
+    int size=Store.size();
+    for(int i=0;i<size;i++)
+    {
+        if(Store[i].name==Name)
+        {
+            cout<<"The goods is already in store\n";
+            return;
+        }
+    }
     Goods new_goods(Category, Name, stod(Price), Description, stod(Inventory));
     Store.push_back(new_goods);
     SaveStoreData(Store);

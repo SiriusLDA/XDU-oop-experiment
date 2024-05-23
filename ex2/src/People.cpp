@@ -82,6 +82,15 @@ void Customer::Register(vector<Customer>& Customers)
     cout<<"Input your phone, name, account and password to register\n";
     cout<<"Format: [phone] [name] [account] [password]\n";
     cin>>Phone>>Name>>Account>>Password;
+    int size=Customers.size();
+    for(int i=0;i<size;i++)
+    {
+        if(Customers[i].account==Account)
+        {
+            cout<<"This account has been occupied\n";
+            return;
+        }
+    }
     Customer new_cus(Phone, Name, Account, Password);
     Customers.push_back(new_cus);
     SaveCustomerData(Customers);

@@ -98,29 +98,38 @@ void ShoppingCartData::AddToShoppingCart(vector<ShoppingCartData>& ShoppingCart,
     string name, number;
     cout<<"Format: [name] [number]\n";
     cin>>name>>number;
-    int Goods_Index=Goods::ReturnGoodsIndex(Store, name);
-    if(Goods_Index==-1)
+    int Goods_Index_st=Goods::ReturnGoodsIndex(Store, name);
+    int Goods_Index_sp= ShoppingCartData::ReturnIndexInShoppingCart(ShoppingCart, name);
+    if(Goods_Index_sp!= -1) //avoid existence
     {
-        cout<<"The goods doesn't exist\n";
+        cout<<"The goods is already in the shopping cart\n";
     }
-    else if(stod(number)==0)
+    else
     {
-        cout<<"The number you buy should be larger than 0\n";
+        if(Goods_Index_st==-1)
+        {
+            cout<<"The goods doesn't exist\n";
+        }
+        else if(stod(number)==0)
+        {
+            cout<<"The number you buy should be larger than 0\n";
+        }
+        else if(Goods_Index_st!=-1 && stod(number)>Store[Goods_Index_st].inventory)
+        {
+            cout<<"Beyond inventory. Please decrese the number you buy\n";
+        }
+        else if(Goods_Index_st!=-1 && stod(number)<=Store[Goods_Index_st].inventory)
+        {
+            double subtotal_price=stod(number)*Store[Goods_Index_st].price;
+            ShoppingCartData data(Store[Goods_Index_st].category, Store[Goods_Index_st].name, Store[Goods_Index_st].price, Store[Goods_Index_st].description, stod(number), subtotal_price, "0");
+            ShoppingCart.push_back(data);
+            Store[Goods_Index_st].inventory-=stod(number);
+            SaveShoppingCartData(ShoppingCart, Customers, Customer_Index);
+            Goods::SaveStoreData(Store);
+            cout<<"Add to shopping cart successful\n";
+        }
     }
-    else if(Goods_Index!=-1 && stod(number)>Store[Goods_Index].inventory)
-    {
-        cout<<"Beyond inventory. Please decrese the number you buy\n";
-    }
-    else if(Goods_Index!=-1 && stod(number)<=Store[Goods_Index].inventory)
-    {
-        double subtotal_price=stod(number)*Store[Goods_Index].price;
-        ShoppingCartData data(Store[Goods_Index].category, Store[Goods_Index].name, Store[Goods_Index].price, Store[Goods_Index].description, stod(number), subtotal_price, "0");
-        ShoppingCart.push_back(data);
-        Store[Goods_Index].inventory-=stod(number);
-        SaveShoppingCartData(ShoppingCart, Customers, Customer_Index);
-        Goods::SaveStoreData(Store);
-        cout<<"Add to shopping cart successful\n";
-    }
+    
 }
 
 int ShoppingCartData::ReturnIndexInShoppingCart(vector<ShoppingCartData>& ShoppingCart, string name)

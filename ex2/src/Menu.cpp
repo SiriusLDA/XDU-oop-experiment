@@ -155,7 +155,7 @@ void Menu::CustomerControlPanal(Admin admin, vector<Customer>& Customers, int Cu
     cout<<"  5.    Add goods to shopping cart\n";
     cout<<"  6.    Delete goods in shopping cart\n";
     cout<<"  7.    Modify goods in shopping cart\n";
-    cout<<"  8.    Add goods in shopping cart to pending settlement list\n";
+    cout<<"  8.    Add goods to settlement list\n";
     cout<<"  9.    Delete goods in pending settlement list\n";
     cout<<"  10.   Settle goods in pending settlement list\n";
     cout<<"  11.   Display shopping history\n";
