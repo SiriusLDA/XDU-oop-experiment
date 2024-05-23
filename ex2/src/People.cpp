@@ -1,4 +1,4 @@
-#include "Menu.hpp"
+
 #include "People.hpp"
 #define Customer_Info_PATH "D:/CodingProjects/oop-experiment/ex2/db/Customer_Info.txt"
 //Admin function
@@ -7,6 +7,8 @@ Admin::Admin(string account, string password)
     this->account=account;
     this->password=password;
 }
+
+
 
 int Admin::Login()
 {
@@ -26,10 +28,6 @@ int Admin::Login()
     }
 }
 
-void Admin::Operation()
-{
-    cout<<"Operation Successful\n";
-}
 
 //Customer function
 Customer::Customer(string phone, string name, string account, string password)
@@ -126,12 +124,3 @@ void Customer::ChangePassword(vector<Customer> &Customers, int index)
     cout<<"Change password Successful\n";
 }
 
-void Customer::Search()
-{
-    cout<<"Search Successful\n";
-}
-
-void Customer::Buy()
-{
-    cout<<"Buy successful\n";
-}

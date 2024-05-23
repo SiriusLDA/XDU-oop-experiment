@@ -11,7 +11,6 @@ class Admin
 
     Admin(string account, string password);
     int Login();
-    void Operation();
 };
 class Customer
 {
@@ -22,8 +21,10 @@ class Customer
     //For login
     string account;
     string password;
-    public:
 
+    public:
+    friend class ShoppingCartData;
+    friend class HistoryData;
     Customer(string phone, string name, string account, string password);
     static void LoadCustomerData(vector<Customer>& Customers);
     static void SaveCustomerData(vector<Customer>& Customers);
@@ -32,6 +33,7 @@ class Customer
     static void Register(vector<Customer> &Customers);
     static int Login(vector<Customer> &Customers);
     static void ChangePassword(vector<Customer> &Customers, int index);
-    static void Search();
-    static void Buy();
+
+    
+    
 };
