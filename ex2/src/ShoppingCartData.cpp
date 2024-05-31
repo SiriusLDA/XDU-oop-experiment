@@ -1,6 +1,7 @@
 #include "ShoppingCartData.hpp"
 #include "People.hpp"
 #include "Goods.hpp"
+using namespace std;
 ShoppingCartData::ShoppingCartData(string category, string name, double single_price, string description, double number, double subtotal_price, string IsInSettlementList)
 {
     this->category=category;
@@ -20,9 +21,9 @@ void ShoppingCartData::CheckShoppingCartExist(vector<Customer>& Customers,int Cu
     ss<<"_ShoppingCart.txt";
     string filename= ss.str();
     ifstream file(filename);
-    if(!file)
+    if(!file)//not exist
     {
-        ofstream newFile(filename);
+        ofstream newFile(filename); //crete file
         file.close();
     }
     else return;
@@ -85,7 +86,7 @@ void ShoppingCartData::DisplayShoppingCart(vector<ShoppingCartData>& ShoppingCar
     double cost_inlist=0;
     for(int i=0;i<size;i++)
     {
-        if(ShoppingCart[i].IsInSettlementList=="1")
+        if(ShoppingCart[i].IsInSettlementList=="1") //display cost of goods in settlement list
         cost_inlist+=ShoppingCart[i].subtotal_price;
     }
     cout<<"The price of all the goods in settlement list is: "<<cost_inlist<<'\n';
@@ -114,13 +115,13 @@ void ShoppingCartData::AddToShoppingCart(vector<ShoppingCartData>& ShoppingCart,
         {
             cout<<"The number you buy should be larger than 0\n";
         }
-        else if(Goods_Index_st!=-1 && stod(number)>Store[Goods_Index_st].inventory)
+        else if(Goods_Index_st!=-1 && stod(number)>Store[Goods_Index_st].inventory) //beyond inventory
         {
             cout<<"Beyond inventory. Please decrese the number you buy\n";
         }
         else if(Goods_Index_st!=-1 && stod(number)<=Store[Goods_Index_st].inventory)
         {
-            double subtotal_price=stod(number)*Store[Goods_Index_st].price;
+            double subtotal_price=stod(number)*Store[Goods_Index_st].price; //update subtotal_price
             ShoppingCartData data(Store[Goods_Index_st].category, Store[Goods_Index_st].name, Store[Goods_Index_st].price, Store[Goods_Index_st].description, stod(number), subtotal_price, "0");
             ShoppingCart.push_back(data);
             Store[Goods_Index_st].inventory-=stod(number);
@@ -166,7 +167,7 @@ void ShoppingCartData::DeleteGoodsInShoppingCart(vector<ShoppingCartData>& Shopp
     cin>>Name;
     int Goods_index_sp=ShoppingCartData::ReturnIndexInShoppingCart(ShoppingCart, Name); //goods index in shopping cart
     int Goods_index_st=Goods::ReturnGoodsIndex(Store, Name); // goods index in store
-    if(Goods_index_sp==-1)
+    if(Goods_index_sp==-1)//not exist
     {
         cout<<"The goods doesn't exist\n";
     }
@@ -181,7 +182,7 @@ void ShoppingCartData::DeleteGoodsInShoppingCart(vector<ShoppingCartData>& Shopp
     }
 }
 
-void ShoppingCartData::MofifyGoodsInShoppingCart(vector<ShoppingCartData>& ShoppingCart, vector<Goods>& Store, vector<Customer>& Customers,int Customer_Index)
+void ShoppingCartData::ModifyGoodsInShoppingCart(vector<ShoppingCartData>& ShoppingCart, vector<Goods>& Store, vector<Customer>& Customers,int Customer_Index)
 {
     cout<<"Input the name of goods to be modified\n";
     string Name;

@@ -1,7 +1,8 @@
 #include "Goods.hpp"
-#define Store_Info_PATH "D:/CodingProjects/oop-experiment/ex2/db/Store_Info.txt"
+using namespace std;
+#define Store_Info_PATH "D:/CodingProjects/oop-experiment/ex2/db/Store_Info.txt" //define file path
 
-Goods::Goods(string category, string name, double price, string description, double inventory)
+Goods::Goods(string category, string name, double price, string description, double inventory) //constructor
 {
     this->category=category;
     this->name=name;
@@ -10,35 +11,46 @@ Goods::Goods(string category, string name, double price, string description, dou
     this->inventory=inventory;
 }
 
-void Goods::LoadStoreData(vector<Goods>& Store)
+void Goods::CheckStoreExist()
 {
-    Store.clear();
-    fstream file;
-    file.open(Store_Info_PATH, ios::in);
+    ifstream file(Store_Info_PATH);
+    if(!file)//not exist
+    {
+        ofstream newFile(Store_Info_PATH); //crete file
+        file.close();
+    }
+    else return;
+}
+
+void Goods::LoadStoreData(vector<Goods>& Store) //load store data from file
+{
+    Store.clear(); //clear vector first to avoid repeating 
+    fstream file; 
+    file.open(Store_Info_PATH, ios::in);//open file in read mode
     string line;
     while(getline(file, line))
     {
-        istringstream iss(line);
+        istringstream iss(line); //define istringstream
         string Category, Name, Price, Description, Inventory;
-        iss>>Category>>Name>>Price>>Description>>Inventory;
-        Store.emplace_back(Category, Name, stod(Price), Description, stod(Inventory)); //load data and push to vector
+        iss>>Category>>Name>>Price>>Description>>Inventory; //read data
+        Store.emplace_back(Category, Name, stod(Price), Description, stod(Inventory)); //push to vector
     }
-    file.close();
+    file.close();//close file
 }
 
 void Goods::SaveStoreData(vector<Goods>& Store) //Save all info in vector to file
 {
     ofstream file;
-    file.open(Store_Info_PATH, ios::trunc); //rewrite file, which means the file can be modified
+    file.open(Store_Info_PATH, ios::trunc); //rewrite file, which means the file is erased at first 
     int size=Store.size();
     for(int i=0;i<size;i++)
     {
-        file<<Store[i].category<<" "<<Store[i].name<<" "<<Store[i].price<<" "<<Store[i].description<<" "<<Store[i].inventory<<"\n";
+        file<<Store[i].category<<" "<<Store[i].name<<" "<<Store[i].price<<" "<<Store[i].description<<" "<<Store[i].inventory<<"\n"; //write to file in certain format
     }
-    file.close();
+    file.close();//close file
 }
 
-void Goods::DisplayStore(vector<Goods>& Store)
+void Goods::DisplayStore(vector<Goods>& Store)//display store info
 {
     int size=Store.size();
     cout<<"All goods in the store are displayed below\n\n";
@@ -54,12 +66,12 @@ int Goods::ReturnGoodsIndex(vector<Goods> Store, string name) //return goods ind
     int size=Store.size();
     for(int i=0; i<size; i++)
     {
-        if(name==Store[i].name) return i;
+        if(name==Store[i].name) return i; //index
     }
-    return -1;
+    return -1;//not found sign
 }
 
-void Goods::AddGoods(vector<Goods>& Store)
+void Goods::AddGoods(vector<Goods>& Store)//add goods to store
 {
     string Category, Name, Price, Description, Inventory;
     cout<<"Input the information of goods to be added\n";
@@ -75,37 +87,37 @@ void Goods::AddGoods(vector<Goods>& Store)
             return;
         }
     }
-    Goods new_goods(Category, Name, stod(Price), Description, stod(Inventory));
-    Store.push_back(new_goods);
-    SaveStoreData(Store);
+    Goods new_goods(Category, Name, stod(Price), Description, stod(Inventory));//create new object
+    Store.push_back(new_goods);//push to vector
+    SaveStoreData(Store);//save data after updating vector
     cout<<"Add goods Successful\n";
 }
 
-void Goods::DeleteGoods(vector<Goods>& Store)
+void Goods::DeleteGoods(vector<Goods>& Store)//detele goods in store
 {
     cout<<"Input the name of goods to be deleted\n";
     string Name;
     cin>>Name;
     int Goods_index=Goods::ReturnGoodsIndex(Store, Name);
-    if(Goods_index==-1)
+    if(Goods_index==-1)//not found
     {
         cout<<"The goods doesn't exist\n";
     }
     else
     {
-        Store.erase(Store.begin()+Goods_index);
-        Goods::SaveStoreData(Store);
+        Store.erase(Store.begin()+Goods_index);//erase according to index in store
+        Goods::SaveStoreData(Store);//save data after updating vector
         cout<<"Delete goods in store successful\n";
     }
 }
 
-void Goods::ModifyGoods(vector<Goods>& Store)
+void Goods::ModifyGoods(vector<Goods>& Store)//modify information
 {
     cout<<"Input the name of goods to be modified\n";
     string Name;
     cin>>Name;
     int Goods_index=Goods::ReturnGoodsIndex(Store, Name);
-    if(Goods_index==-1)
+    if(Goods_index==-1)//not found
     {
         cout<<"The goods doesn't exist\n";
     }
@@ -121,10 +133,11 @@ void Goods::ModifyGoods(vector<Goods>& Store)
         }
         else
         {
+            //modify information according to index
             Store[Goods_index].price=stod(Price);
             Store[Goods_index].description=Description;
             Store[Goods_index].inventory=stod(Inventory);
-            Goods::SaveStoreData(Store);
+            Goods::SaveStoreData(Store);//save data after updating vector
             cout<<"Modify goods successful\n";
         }
         
@@ -176,12 +189,12 @@ int Goods::ClosestMatch(vector<Goods>& Store, string& keyword) //find min LD Ind
     int ClosestMatchIndex=-1;
     int minDistance= numeric_limits<int>::max();
     int size=Store.size();
-    for(int i=0;i<size;i++)
+    for(int i=0;i<size;i++)//
     {
         int distance=Goods::LevenshteinDistance(Store[i].name, keyword);
         if(distance< minDistance)
         {
-            minDistance=distance;
+            minDistance=distance; //update min distance
             ClosestMatchIndex=i;
         }
     }

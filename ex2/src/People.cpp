@@ -1,5 +1,6 @@
 
 #include "People.hpp"
+using namespace std;
 #define Customer_Info_PATH "D:/CodingProjects/oop-experiment/ex2/db/Customer_Info.txt"
 //Admin function
 Admin::Admin(string account, string password)
@@ -36,6 +37,17 @@ Customer::Customer(string phone, string name, string account, string password)
     this->name=name;
     this->account=account;
     this->password=password;
+}
+
+void Customer::CheckCustomerExist()
+{
+    ifstream file(Customer_Info_PATH);
+    if(!file)//not exist
+    {
+        ofstream newFile(Customer_Info_PATH); //crete file
+        file.close();
+    }
+    else return;
 }
 
 void Customer::LoadCustomerData(vector<Customer>& Customers) //load customer info from file

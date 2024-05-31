@@ -1,6 +1,7 @@
 #include"HistoryData.hpp"
 #include"People.hpp"
-HistoryData::HistoryData(string year, string month, string date, string category, string name, double subtotal_price, double subtotal_price_afte_discount)
+using namespace std;
+HistoryData::HistoryData(string year, string month, string date, string category, string name, double subtotal_price, double subtotal_price_afte_discount)//constructor
 {
     this->year=year;
     this->month=month;
@@ -16,11 +17,11 @@ void HistoryData::CheckHistoryExist(vector<Customer>& Customers,int Customer_Ind
     ss<<"D:/CodingProjects/oop-experiment/ex2/db/Customer_ShoppingHistory_Info/";
     ss<<Customers[Customer_Index].account;
     ss<<"_ShoppingHistory.txt";
-    string filename= ss.str();
+    string filename= ss.str();//filename
     ifstream file(filename);
-    if(!file)
+    if(!file)//not exist
     {
-        ofstream newFile(filename);
+        ofstream newFile(filename); //create file
         file.close();
     }
     else return;
@@ -74,7 +75,7 @@ void HistoryData::DisplayHistory(vector<HistoryData>& History)
 
 void HistoryData::CategorizeData(vector<HistoryData>& History, string year, string month, string date)
 {
-    unordered_map<string, pair<double,double>> CategoryPriceSum;
+    unordered_map<string, pair<double,double>> CategoryPriceSum; //use map to categorize
     int size=History.size();
     for(int i=0;i<size;i++)
     {

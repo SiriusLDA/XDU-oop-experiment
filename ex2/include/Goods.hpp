@@ -13,6 +13,7 @@ class Goods
     public:
     friend class ShoppingCartData;
     Goods(string category, string name, double price, string description, double inventory);
+    static void CheckStoreExist();
     static void LoadStoreData(vector<Goods>& Store);
     static void SaveStoreData(vector<Goods>& Store);
     static void DisplayStore(vector<Goods>& Store);

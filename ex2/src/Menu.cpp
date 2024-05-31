@@ -2,6 +2,7 @@
 #include "People.hpp"
 #include "Goods.hpp"
 #include "ShoppingCartData.hpp"
+using namespace std;
 //Menu function for admin
 void Menu::SwitchUser(Admin admin, vector<Customer>& Customers, vector<Goods>& Store, vector<vector<ShoppingCartData>>& ShoppingCart, vector<vector<HistoryData>> History)
 {
@@ -110,7 +111,7 @@ void Menu::CustomerMainInterface(Admin admin, vector<Customer>& Customers, vecto
         vector<ShoppingCartData> new_sp;
         vector<HistoryData> new_his;
         ShoppingCart.push_back(new_sp);
-        History.push_back(new_his);
+        History.push_back(new_his); //create new object after registering 
         cout<<"You can login now\n";
         Menu::CustomerMainInterface(admin, Customers, Store, ShoppingCart, History);
     }
@@ -133,11 +134,11 @@ void Menu::CustomerLogin(Admin admin, vector<Customer>& Customers, vector<Goods>
     {
         Menu::CustomerControlPanal(admin, Customers,index, Store, ShoppingCart, History);
     }
-    else if(index==-1)
+    else if(index==-1)//wrong password
     {
         Menu::CustomerLogin(admin, Customers, Store, ShoppingCart, History);
     }
-    else
+    else//account doesn't exist
     {
         Menu::CustomerMainInterface(admin, Customers, Store, ShoppingCart, History);
     }
@@ -201,7 +202,7 @@ void Menu::CustomerControlPanal(Admin admin, vector<Customer>& Customers, int Cu
     }
     else if(choice==7)
     {
-        ShoppingCartData::MofifyGoodsInShoppingCart(ShoppingCart[Customer_index],Store, Customers, Customer_index);
+        ShoppingCartData::ModifyGoodsInShoppingCart(ShoppingCart[Customer_index],Store, Customers, Customer_index);
         Menu::CustomerControlPanal(admin, Customers, Customer_index, Store, ShoppingCart, History);
     }
     else if(choice==8)

@@ -25,7 +25,7 @@ class ShoppingCartData
     static int ReturnIndexInShoppingCart(vector<ShoppingCartData>& ShoppingCart, string name);
     static void SearchGoodsInShoppingCart(vector<ShoppingCartData>& ShoppingCart);
     static void DeleteGoodsInShoppingCart(vector<ShoppingCartData>& ShoppingCart, vector<Goods>& Store, vector<Customer>& Customers,int Customer_Index);
-    static void MofifyGoodsInShoppingCart(vector<ShoppingCartData>& ShoppingCart, vector<Goods>& Store, vector<Customer>& Customers,int Customer_Index);
+    static void ModifyGoodsInShoppingCart(vector<ShoppingCartData>& ShoppingCart, vector<Goods>& Store, vector<Customer>& Customers,int Customer_Index);
 
     static void AddtoSettlementList(vector<ShoppingCartData>& ShoppingCart, vector<Customer>& Customers,int Customer_Index);
     static void RemoveFromSettlementList(vector<ShoppingCartData>& ShoppingCart, vector<Customer>& Customers,int Customer_Index);
